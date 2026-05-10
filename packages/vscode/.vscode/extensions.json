@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ms-toolsai.jupyter",
+    "ms-python.python",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml"
+  ]
+}

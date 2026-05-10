@@ -1,0 +1,15 @@
+{
+  "name": "jupyter-config-cells-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "install:packages": "npm --prefix packages/vscode install && npm --prefix packages/jupyterlab install",
+    "build": "npm run build:vscode && npm run build:jupyterlab",
+    "build:vscode": "npm --prefix packages/vscode run compile",
+    "build:jupyterlab": "npm --prefix packages/jupyterlab run build",
+    "test": "npm run test:vscode && npm run test:jupyterlab",
+    "test:vscode": "npm --prefix packages/vscode test",
+    "test:jupyterlab": "npm --prefix packages/jupyterlab test"
+  }
+}

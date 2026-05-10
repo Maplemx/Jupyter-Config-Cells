@@ -1,0 +1,57 @@
+{
+  "name": "jupyterlab-config-cells",
+  "version": "0.1.0",
+  "description": "YAML, JSONC, TOML, and ENV config cells for JupyterLab notebooks.",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "notebook",
+    "yaml",
+    "json",
+    "jsonc",
+    "toml",
+    "dotenv",
+    "config"
+  ],
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Maplemx/Jupyter-Config-Cells.git",
+    "directory": "packages/jupyterlab"
+  },
+  "bugs": {
+    "url": "https://github.com/Maplemx/Jupyter-Config-Cells/issues"
+  },
+  "homepage": "https://github.com/Maplemx/Jupyter-Config-Cells#readme",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "style": "style/index.css",
+  "files": [
+    "LICENSE",
+    "lib",
+    "style",
+    "install.json"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc -p ./",
+    "test": "npm run build && node test/core.test.js",
+    "clean": "rm -rf lib"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^4.2.0",
+    "@jupyterlab/apputils": "^4.2.0",
+    "@jupyterlab/notebook": "^4.2.0",
+    "@lumino/widgets": "^2.4.0",
+    "yaml": "^2.8.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  },
+  "jupyterlab": {
+    "extension": true
+  }
+}

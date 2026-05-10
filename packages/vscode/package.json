@@ -1,0 +1,257 @@
+{
+  "name": "jupyter-config-cells",
+  "displayName": "Jupyter Config Cells",
+  "description": "YAML, JSON, JSONC, TOML, and ENV config cells for Jupyter notebooks in VS Code.",
+  "version": "0.1.0",
+  "publisher": "Maplemx",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "extensionDependencies": [
+    "ms-toolsai.jupyter"
+  ],
+  "categories": [
+    "Notebooks",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "jupyter",
+    "notebook",
+    "jupyter notebook",
+    "jupyter yaml",
+    "jupyter json",
+    "jupyter jsonc",
+    "jupyter toml",
+    "jupyter env",
+    "jupyter dotenv",
+    "yaml",
+    "json",
+    "jsonc",
+    "toml",
+    "env",
+    "dotenv",
+    "config",
+    "configuration",
+    "config cell",
+    "notebook config",
+    "python notebook",
+    "ipynb"
+  ],
+  "activationEvents": [
+    "onNotebook:jupyter-notebook",
+    "onCommand:jupyterConfigCells.insertYaml",
+    "onCommand:jupyterConfigCells.insertJson",
+    "onCommand:jupyterConfigCells.insertJsonc",
+    "onCommand:jupyterConfigCells.insertToml",
+    "onCommand:jupyterConfigCells.insertEnv",
+    "onCommand:jupyterConfigCells.convertCurrent",
+    "onCommand:jupyterConfigCells.validateCurrent",
+    "onCommand:jupyterConfigCells.validateAll",
+    "onCommand:jupyterConfigCells.exportCurrent",
+    "onCommand:jupyterConfigCells.exportAll",
+    "onCommand:jupyterConfigCells.runCurrent",
+    "onCommand:jupyterConfigCells.openCellActions"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "jupyterConfigCells.insertYaml",
+        "title": "Config Cells: Insert YAML",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.insertJson",
+        "title": "Config Cells: Insert JSON",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.insertJsonc",
+        "title": "Config Cells: Insert JSONC",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.insertToml",
+        "title": "Config Cells: Insert TOML",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.insertEnv",
+        "title": "Config Cells: Insert ENV",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.convertCurrent",
+        "title": "Config Cells: Set Cell Type",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.validateCurrent",
+        "title": "Config Cells: Validate Current",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.validateAll",
+        "title": "Config Cells: Validate All",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.exportCurrent",
+        "title": "Config Cells: Export Current",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.exportAll",
+        "title": "Config Cells: Export All",
+        "category": "Config Cells"
+      },
+      {
+        "command": "jupyterConfigCells.runCurrent",
+        "title": "Config Cells: Convert to Variable",
+        "category": "Config Cells",
+        "icon": "$(symbol-variable)"
+      },
+      {
+        "command": "jupyterConfigCells.openCellActions",
+        "title": "Config",
+        "category": "Config Cells",
+        "icon": "$(json)"
+      }
+    ],
+    "menus": {
+      "notebook/cell/execute": [
+        {
+          "command": "jupyterConfigCells.runCurrent",
+          "when": "notebookType == 'jupyter-notebook' && notebookCellType == code",
+          "group": "jupyterCellExecute@-1"
+        }
+      ],
+      "notebook/cell/title": [
+        {
+          "command": "jupyterConfigCells.openCellActions",
+          "when": "notebookType == 'jupyter-notebook'",
+          "group": "inline@90"
+        }
+      ],
+      "notebook/toolbar": [
+        {
+          "command": "jupyterConfigCells.openCellActions",
+          "when": "notebookType == 'jupyter-notebook'",
+          "group": "navigation@90"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "yaml",
+        "aliases": [
+          "YAML",
+          "yaml"
+        ],
+        "extensions": [
+          ".yaml",
+          ".yml"
+        ]
+      },
+      {
+        "id": "toml",
+        "aliases": [
+          "TOML",
+          "toml"
+        ],
+        "extensions": [
+          ".toml"
+        ]
+      },
+      {
+        "id": "dotenv",
+        "aliases": [
+          "ENV",
+          "dotenv"
+        ],
+        "extensions": [
+          ".env"
+        ],
+        "filenames": [
+          ".env"
+        ]
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "jupyterConfigCells.insertYaml",
+        "key": "ctrl+alt+y",
+        "mac": "cmd+alt+y",
+        "when": "notebookEditorFocused"
+      },
+      {
+        "command": "jupyterConfigCells.insertJson",
+        "key": "ctrl+alt+j",
+        "mac": "cmd+alt+j",
+        "when": "notebookEditorFocused"
+      },
+      {
+        "command": "jupyterConfigCells.insertToml",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t",
+        "when": "notebookEditorFocused"
+      }
+    ],
+    "configuration": {
+      "title": "Jupyter Config Cells",
+      "properties": {
+        "jupyterConfigCells.defaultExportDir": {
+          "type": "string",
+          "default": "./configs",
+          "description": "Default directory for exported config cells."
+        },
+        "jupyterConfigCells.autoValidate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate config cells automatically when commands run."
+        },
+        "jupyterConfigCells.insertPosition": {
+          "type": "string",
+          "enum": [
+            "below",
+            "above",
+            "end"
+          ],
+          "default": "below",
+          "description": "Default insertion position for new config cells."
+        },
+        "jupyterConfigCells.autoSetDetectedCellType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically change obvious YAML, JSON, JSONC, TOML, and ENV notebook cells away from Python to avoid Python diagnostics."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf out",
+    "compile": "npm run clean && tsc -p ./",
+    "test": "npm run compile && node test/core.test.js",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Maplemx/Jupyter-Config-Cells.git",
+    "directory": "packages/vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/Maplemx/Jupyter-Config-Cells/issues"
+  },
+  "homepage": "https://github.com/Maplemx/Jupyter-Config-Cells#readme",
+  "dependencies": {
+    "yaml": "^2.8.4"
+  }
+}

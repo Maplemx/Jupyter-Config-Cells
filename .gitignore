@@ -1,0 +1,49 @@
+# Local design/spec files
+spec/
+SPEC.md
+*.spec
+*.spec.md
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Node / VS Code extension
+node_modules/
+out/
+lib/
+*.vsix
+.vscode-test/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors and OS files
+.DS_Store
+.idea/
+.vscode/
+!packages/vscode/.vscode/
+!packages/vscode/.vscode/launch.json
+!packages/vscode/.vscode/settings.json
+!packages/vscode/.vscode/tasks.json
+!packages/vscode/.vscode/extensions.json
