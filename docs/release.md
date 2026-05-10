@@ -41,13 +41,15 @@ vsce publish
 
 ## JupyterLab npm Package
 
-1. Log in to the official npm registry. If the global registry is npmmirror, keep the registry flag:
+1. Create an npm automation token and add it to GitHub repository secrets as `NPM_TOKEN`.
+2. Run the `Publish JupyterLab Extension` workflow manually, or publish locally.
+3. For local publishing, log in to the official npm registry. If the global registry is npmmirror, keep the registry flag:
 
 ```bash
 npm login --registry=https://registry.npmjs.org/
 ```
 
-2. Build and publish the JupyterLab package:
+4. Build and publish the JupyterLab package:
 
 ```bash
 npm --prefix packages/jupyterlab install
