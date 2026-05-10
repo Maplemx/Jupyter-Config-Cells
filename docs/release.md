@@ -25,13 +25,13 @@ git push -u origin main
 
 ## VS Code Marketplace
 
-1. Create a publisher in the Visual Studio Marketplace.
-2. Create a Marketplace personal access token with extension publishing permission.
-3. Add the token to GitHub repository secrets as `VSCE_PAT`.
-4. Run the `Publish VS Code Extension` workflow manually, or publish locally:
+1. Use Node.js 20 or newer for `@vscode/vsce`.
+2. Create or verify the `Maplemx` publisher in the Visual Studio Marketplace.
+3. Create a Marketplace personal access token with extension publishing permission for that publisher.
+4. Add the token to GitHub repository secrets as `VSCE_PAT`.
+5. Run the `Publish VS Code Extension` workflow manually, or publish locally:
 
 ```bash
-npm run install:packages
 npm run build:vscode
 cd packages/vscode
 npm install -g @vscode/vsce
@@ -41,12 +41,17 @@ vsce publish
 
 ## JupyterLab npm Package
 
-1. Finalize `name`, `repository`, `bugs`, and `homepage` in `packages/jupyterlab/package.json`.
+1. Log in to the official npm registry. If the global registry is npmmirror, keep the registry flag:
+
+```bash
+npm login --registry=https://registry.npmjs.org/
+```
+
 2. Build and publish the JupyterLab package:
 
 ```bash
 npm --prefix packages/jupyterlab install
 npm run build:jupyterlab
 cd packages/jupyterlab
-npm publish
+npm publish --registry=https://registry.npmjs.org/ --access public
 ```
