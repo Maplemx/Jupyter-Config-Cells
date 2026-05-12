@@ -75,6 +75,19 @@ test_list:
 
   assert.deepEqual(validateSyntax("jsonc", parsedJsonc.body), []);
   assert.ok(validateSyntax("jsonc", "{ bad").length > 0);
+
+  // TOML detection: should detect
+  assert.equal(detectConfigLanguage("[server]\nhost = \"127.0.0.1\"\nport = 8000"), "toml");
+  assert.equal(detectConfigLanguage("[database]\nurl = \"sqlite:///app.db\"\npool_size = 5"), "toml");
+  assert.equal(detectConfigLanguage("host = \"127.0.0.1\"\nport = 8000\ndebug = false"), "toml");
+  assert.equal(detectConfigLanguage("timeout = 30\nretries = 3\nenabled = true"), "toml");
+
+  // TOML detection: should NOT detect Python code as TOML
+  assert.notEqual(detectConfigLanguage("df = pd.read_csv(\"data.csv\")"), "toml");
+  assert.notEqual(detectConfigLanguage("model = LinearRegression()\nresult = model.fit(X, y)"), "toml");
+  assert.notEqual(detectConfigLanguage("x = some_function()\ny = another()"), "toml");
+  assert.notEqual(detectConfigLanguage("debug = True\nverbose = False"), "toml");
+  assert.notEqual(detectConfigLanguage("value = None\nresult = compute()"), "toml");
 }
 
 console.log("core regression tests passed");

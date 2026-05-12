@@ -321,9 +321,13 @@ function looksLikeToml(text: string): boolean {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter((line) => line && !line.startsWith("#"));
+  // Value must be a TOML literal: quoted string, number, lowercase boolean, date, array, or
+  // inline table. This excludes Python assignments whose values are function calls, Python
+  // keywords (True/False/None), or arbitrary expressions.
+  const tomlKvPattern = /^[A-Za-z0-9_.-]+\s=\s(?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|\d{4}-\d{2}-\d{2}|\[|\{)/;
   return (
     lines.some((line) => /^\[[A-Za-z0-9_.-]+\]$/.test(line)) ||
-    lines.some((line) => /^[A-Za-z0-9_.-]+\s=\s/.test(line))
+    lines.some((line) => tomlKvPattern.test(line))
   );
 }
 

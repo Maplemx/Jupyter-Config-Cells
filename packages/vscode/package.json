@@ -2,7 +2,7 @@
   "name": "jupyter-config-cells",
   "displayName": "Jupyter Config Cells",
   "description": "YAML, JSON, JSONC, TOML, and ENV config cells for Jupyter notebooks in VS Code.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "Maplemx",
   "license": "Apache-2.0",
   "engines": {
