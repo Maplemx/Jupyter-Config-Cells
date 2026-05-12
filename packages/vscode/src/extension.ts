@@ -3,6 +3,7 @@ import { exportAllConfigCells, exportCurrentConfigCell } from "./commands/export
 import { insertConfigCell } from "./commands/insertConfigCell";
 import { convertCurrentCell } from "./commands/convertCell";
 import { validateAllConfigCells, validateCurrentConfigCell } from "./commands/validate";
+import { formatCurrentConfigCell } from "./commands/formatCell";
 import { openCellActions } from "./commands/openCellActions";
 import { runCurrentConfigCell } from "./commands/runConfigCell";
 import { autoConvertVisibleConfigCells, registerAutoDetect } from "./interaction/autoDetect";
@@ -31,6 +32,9 @@ export function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerCommand("jupyterConfigCells.convertCurrent", (language?: ConfigCellLanguage, cell?: vscode.NotebookCell) =>
       convertCurrentCell(language, cell)
+    ),
+    vscode.commands.registerCommand("jupyterConfigCells.formatCurrent", () =>
+      formatCurrentConfigCell()
     ),
     vscode.commands.registerCommand("jupyterConfigCells.validateCurrent", () =>
       validateCurrentConfigCell(output)

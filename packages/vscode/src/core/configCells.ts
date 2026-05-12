@@ -145,6 +145,16 @@ export function parseRunnableConfigCell(source: string): RunnableConfigCell | un
   };
 }
 
+export function formatConfigSource(language: ConfigCellLanguage, source: string): string {
+  switch (language) {
+    case "yaml": return formatYaml(source);
+    case "json": return formatJson(source);
+    case "jsonc": return formatJsonc(source);
+    case "toml": return formatToml(source);
+    case "dotenv": return formatDotenv(source);
+  }
+}
+
 export function validateSyntax(language: ConfigCellLanguage, source: string): string[] {
   try {
     parseConfigValue(language, source);
@@ -472,4 +482,68 @@ function pythonTripleQuotedString(value: string): string {
     return `r'''\n${normalized}\n'''`;
   }
   return JSON.stringify(normalized);
+}
+
+function formatYaml(source: string): string {
+  const doc = parseDocument(source);
+  return String(doc);
+}
+
+function formatJson(source: string): string {
+  return JSON.stringify(JSON.parse(source), null, 2);
+}
+
+function formatJsonc(source: string): string {
+  const noTrailingCommas = source.replace(/,(\s*(?:\/\/[^\n]*\s*)*)([\]}])/g, "$1$2");
+  const lines = noTrailingCommas.split(/\r?\n/);
+  let depth = 0;
+  const output: string[] = [];
+  for (const raw of lines) {
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      output.push("");
+      continue;
+    }
+    const startsWithClose = /^[}\]]/.test(trimmed);
+    if (startsWithClose) {
+      depth = Math.max(0, depth - 1);
+    }
+    output.push("  ".repeat(depth) + trimmed);
+    let opens = 0, closes = 0, inString = false, escape = false;
+    for (let i = 0; i < trimmed.length; i++) {
+      const ch = trimmed[i];
+      if (escape) { escape = false; continue; }
+      if (ch === "\\" && inString) { escape = true; continue; }
+      if (ch === "\"") { inString = !inString; continue; }
+      if (inString) continue;
+      if (ch === "/" && trimmed[i + 1] === "/") break;
+      if (ch === "{" || ch === "[") opens++;
+      else if (ch === "}" || ch === "]") closes++;
+    }
+    depth = Math.max(0, depth + opens - closes + (startsWithClose ? 1 : 0));
+  }
+  return output.join("\n");
+}
+
+function formatToml(source: string): string {
+  return source
+    .split(/\r?\n/)
+    .map((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#") || /^\[/.test(trimmed)) return trimmed;
+      return trimmed.replace(/^([A-Za-z0-9_.-]+)\s*=\s*/, "$1 = ");
+    })
+    .join("\n");
+}
+
+function formatDotenv(source: string): string {
+  return source
+    .split(/\r?\n/)
+    .map((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return trimmed;
+      const match = trimmed.match(/^((?:export\s+)?[A-Z_][A-Z0-9_]*)\s*=\s*(.*)/);
+      return match ? `${match[1]}=${match[2]}` : trimmed;
+    })
+    .join("\n");
 }

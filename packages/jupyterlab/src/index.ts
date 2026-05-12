@@ -18,6 +18,7 @@ import {
   ConfigCellLanguage,
   createConfigCellMetadata,
   detectConfigLanguage,
+  formatConfigSource,
   parseRunnableConfigCell,
   readConfigCellMetadata,
   sourceWithMarker,
@@ -35,6 +36,7 @@ const COMMANDS = {
   open: "jupyter-config-cells:open",
   toVariable: "jupyter-config-cells:to-variable",
   setType: "jupyter-config-cells:set-type",
+  format: "jupyter-config-cells:format-current",
   validate: "jupyter-config-cells:validate-current",
   insertYaml: "jupyter-config-cells:insert-yaml",
   insertJsonc: "jupyter-config-cells:insert-jsonc",
@@ -82,6 +84,11 @@ function registerCommands(app: JupyterFrontEnd, tracker: INotebookTracker) {
     label: "Set Cell Type",
     caption: "Set the active cell as YAML, JSONC, TOML, or ENV config",
     execute: async () => setType(tracker.currentWidget)
+  });
+  commands.addCommand(COMMANDS.format, {
+    label: "Format Current",
+    caption: "Beautify the active config cell and remove trailing commas",
+    execute: async () => formatCurrent(tracker.currentWidget)
   });
   commands.addCommand(COMMANDS.validate, {
     label: "Validate Current",
@@ -151,6 +158,7 @@ async function openActions(app: JupyterFrontEnd, tracker: INotebookTracker) {
       Dialog.cancelButton(),
       Dialog.okButton({ label: "To Variable" }),
       Dialog.okButton({ label: "Set Type" }),
+      Dialog.okButton({ label: "Format" }),
       Dialog.okButton({ label: "Validate" }),
       Dialog.okButton({ label: "Insert YAML" })
     ]
@@ -162,6 +170,9 @@ async function openActions(app: JupyterFrontEnd, tracker: INotebookTracker) {
       break;
     case "Set Type":
       await app.commands.execute(COMMANDS.setType);
+      break;
+    case "Format":
+      await app.commands.execute(COMMANDS.format);
       break;
     case "Validate":
       await app.commands.execute(COMMANDS.validate);
@@ -194,6 +205,40 @@ async function setType(panel: NotebookPanel | null) {
   convertCell(notebook, notebook.activeCellIndex, language);
   if (panel) {
     panel.context.model.dirty = true;
+  }
+}
+
+async function formatCurrent(panel: NotebookPanel | null) {
+  const notebook = getNotebook(panel);
+  const cell = notebook.activeCell as any;
+  const source = getCellSource(cell);
+  const parsed = parseRunnableConfigCell(source);
+  const metadata = readConfigCellMetadata(readCellMetadata(cell));
+  const language = metadata?.language || detectConfigLanguage(source) || parsed?.language;
+  if (!language) {
+    await showDialog({
+      title: "Jupyter Config Cells",
+      body: "The active cell is not a recognized config cell.",
+      buttons: [Dialog.okButton()]
+    });
+    return;
+  }
+  let formatted: string;
+  try {
+    formatted = formatConfigSource(language, source);
+  } catch {
+    await showDialog({
+      title: "Jupyter Config Cells",
+      body: "Cannot format: config cell has syntax errors. Fix them first.",
+      buttons: [Dialog.okButton()]
+    });
+    return;
+  }
+  if (formatted !== source) {
+    setCellSource(cell, formatted);
+    if (panel) {
+      panel.context.model.dirty = true;
+    }
   }
 }
 

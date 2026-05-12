@@ -7,6 +7,7 @@ function runCoreRegressionTests({
   buildPythonRunnerSource,
   createConfigCellMetadata,
   detectConfigLanguage,
+  formatConfigSource,
   parseConfigValue,
   parseRunnableConfigCell,
   sourceWithMarker,
@@ -81,6 +82,37 @@ test_list:
   assert.equal(detectConfigLanguage("[database]\nurl = \"sqlite:///app.db\"\npool_size = 5"), "toml");
   assert.equal(detectConfigLanguage("host = \"127.0.0.1\"\nport = 8000\ndebug = false"), "toml");
   assert.equal(detectConfigLanguage("timeout = 30\nretries = 3\nenabled = true"), "toml");
+
+  // formatConfigSource: JSONC trailing comma removal
+  assert.equal(
+    formatConfigSource("jsonc", '{\n  "a": 1,\n  "b": 2,\n}'),
+    '{\n  "a": 1,\n  "b": 2\n}'
+  );
+  // formatConfigSource: JSONC trailing comma before ] with comment
+  assert.equal(
+    formatConfigSource("jsonc", '{\n  "list": [\n    1,\n    2, // last\n  ]\n}'),
+    '{\n  "list": [\n    1,\n    2 // last\n  ]\n}'
+  );
+  // formatConfigSource: JSONC re-indent
+  assert.equal(
+    formatConfigSource("jsonc", '{\n"key": "value"\n}'),
+    '{\n  "key": "value"\n}'
+  );
+  // formatConfigSource: JSON pretty-print
+  assert.equal(
+    formatConfigSource("json", '{"a":1,"b":2}'),
+    '{\n  "a": 1,\n  "b": 2\n}'
+  );
+  // formatConfigSource: TOML spacing
+  assert.equal(
+    formatConfigSource("toml", "[server]\nhost=\"127.0.0.1\"\nport=8000"),
+    "[server]\nhost = \"127.0.0.1\"\nport = 8000"
+  );
+  // formatConfigSource: dotenv no spaces around =
+  assert.equal(
+    formatConfigSource("dotenv", "KEY = value\nOTHER=  hello"),
+    "KEY=value\nOTHER=hello"
+  );
 
   // TOML detection: should NOT detect Python code as TOML
   assert.notEqual(detectConfigLanguage("df = pd.read_csv(\"data.csv\")"), "toml");

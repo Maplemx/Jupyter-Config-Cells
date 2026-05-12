@@ -88,6 +88,11 @@
         "category": "Config Cells"
       },
       {
+        "command": "jupyterConfigCells.formatCurrent",
+        "title": "Config Cells: Format Current",
+        "category": "Config Cells"
+      },
+      {
         "command": "jupyterConfigCells.validateCurrent",
         "title": "Config Cells: Validate Current",
         "category": "Config Cells"
