@@ -331,6 +331,12 @@ function looksLikeToml(text: string): boolean {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter((line) => line && !line.startsWith("#"));
+  // Unambiguous Python syntax: decorators, async/def/class, return type arrows,
+  // triple-quoted strings, import statements. None of these appear in TOML.
+  const pythonPattern = /^(?:@|async\s|def\s|class\s|import\s|from\s|return\b|raise\b|yield\b|""")/;
+  if (lines.some((line) => pythonPattern.test(line) || line.includes(" -> "))) {
+    return false;
+  }
   // Value must be a TOML literal: quoted string, number, lowercase boolean, date, array, or
   // inline table. This excludes Python assignments whose values are function calls, Python
   // keywords (True/False/None), or arbitrary expressions.

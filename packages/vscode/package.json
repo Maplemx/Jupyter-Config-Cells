@@ -2,7 +2,7 @@
   "name": "jupyter-config-cells",
   "displayName": "Jupyter Config Cells",
   "description": "YAML, JSON, JSONC, TOML, and ENV config cells for Jupyter notebooks in VS Code.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "Maplemx",
   "license": "Apache-2.0",
   "engines": {
@@ -40,19 +40,7 @@
     "ipynb"
   ],
   "activationEvents": [
-    "onNotebook:jupyter-notebook",
-    "onCommand:jupyterConfigCells.insertYaml",
-    "onCommand:jupyterConfigCells.insertJson",
-    "onCommand:jupyterConfigCells.insertJsonc",
-    "onCommand:jupyterConfigCells.insertToml",
-    "onCommand:jupyterConfigCells.insertEnv",
-    "onCommand:jupyterConfigCells.convertCurrent",
-    "onCommand:jupyterConfigCells.validateCurrent",
-    "onCommand:jupyterConfigCells.validateAll",
-    "onCommand:jupyterConfigCells.exportCurrent",
-    "onCommand:jupyterConfigCells.exportAll",
-    "onCommand:jupyterConfigCells.runCurrent",
-    "onCommand:jupyterConfigCells.openCellActions"
+    "onNotebook:jupyter-notebook"
   ],
   "main": "./out/extension.js",
   "contributes": {

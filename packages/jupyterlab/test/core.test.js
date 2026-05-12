@@ -120,6 +120,10 @@ test_list:
   assert.notEqual(detectConfigLanguage("x = some_function()\ny = another()"), "toml");
   assert.notEqual(detectConfigLanguage("debug = True\nverbose = False"), "toml");
   assert.notEqual(detectConfigLanguage("value = None\nresult = compute()"), "toml");
+  // Python with decorator + async def + return type annotation
+  assert.notEqual(detectConfigLanguage(
+    "# to: app_settings\nagent = Agently.create_agent()\n\n@agent.tool_func\nasync def get_weather(\n    city: str,\n) -> dict:\n    \"\"\"docstring\"\"\"\n    r = requests.get(f\"https://example.com/{city}\", timeout=10)\n    return {\"temp\": 20}"
+  ), "toml");
 }
 
 console.log("core regression tests passed");
